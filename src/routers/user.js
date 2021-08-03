@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const multer = require("multer");
 const sharp = require("sharp");
+const { sendWelcomeMail } = require("../emails/account");
 const auth = require("../middleware/auth");
 const User = require("../models/user");
 
@@ -40,6 +41,7 @@ router.post("/users", async (req, res) => {
   try {
     const user = new User(req.body);
     await user.save();
+    // sendWelcomeMail(user.email, user.name)
     const token = await user.generateAuthToken();
     res.status(201).send({ user, token });
   } catch (err) {
